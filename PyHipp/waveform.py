@@ -58,7 +58,7 @@ class Waveform(DPT.DPObject):
         
         # check on the mountainsort template data and create a DPT object accordingly
         # Example:
-        if self.data.size != 0:
+        if not self.data.size:
             # create object if data is not empty
             DPT.DPObject.create(self, *args, **kwargs)
         else:
