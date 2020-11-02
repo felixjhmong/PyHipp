@@ -133,27 +133,19 @@ class Waveform(DPT.DPObject):
                 elif plot_type == 'Array':
                     return len(self.array_dict), i
             elif self.current_plot_type == 'Array' and plot_type == 'Channel':
-                self.current_plot_type = 'Channel'
-                x = 0
-                for ar in self.array_dict:
-                    if x==(i-1):
-                        return self.numsets, self.array_dict[ar] + 1
-                    x += 1
                 # add code to return number of channels and the appropriate
                 # channel number if the current array number is i
-                return self.numSets, i
-            
+                if self.channel_filename[7:] == i:
+                    return self.numSets, i
+                    print (self.channel_filename[7:])
                     
             elif self.current_plot_type == 'Channel' and plot_type == 'Array':  
                 # add code to return number of arrays and the appropriate
                 # array number if the current channel number is i
+                if self.array_dict[0] == i:
+                    return len(self.array_dict), i
+                    print (self.channel_filename[7:])
                 self.current_plot_type = 'Array'
-                y = 0
-                for ar in self.array_dict:
-                    if i <= self.array_dict [ar]:
-                        return len(self.array_dict), y
-                    y += 1
-                return len(self.array_dict), i
 
 
             # this will be called by PanGUI.main to return two values: 
@@ -163,7 +155,7 @@ class Waveform(DPT.DPObject):
             # ..................code...................
             # .........................................
             
-            #return int(self.numSets + len(self.array_dict)), i # please return two items here: <total-number-of-items-to-plot>, <current-item-index-to-plot>
+            return int(self.numSets + len(self.array_dict)), i # please return two items here: <total-number-of-items-to-plot>, <current-item-index-to-plot>
                 
         if ax is None:
             ax = plt.gca()
@@ -181,16 +173,11 @@ class Waveform(DPT.DPObject):
                 ax = fig.add_subplot(1,1,1)
             isCorner = 1
             self.plot_data(i, ax, plotOpts, isCorner)
-            self.current_plot_type = 'Channel'
         elif plot_type == 'Array':
             self.remove_subplots(fig)
             advals = np.array([*self.array_dict.values()])
             # set the starting index cstart for array i
             # set the ending index cend for array i
-            cstart = 0
-            if i > 0:
-                cstart = advals [i-1] + 1
-            cend = advals [i]
             currch = cstart
             while currch <= cend :
                 # get channel name
@@ -199,8 +186,7 @@ class Waveform(DPT.DPObject):
                 ax, isCorner = getChannelInArray(currchname, fig)
                 self.plot_data(currch, ax, plotOpts, isCorner)
                 currch += 1
-            self.current_plot_type = 'Array'
-        return ax
+
 
 
         #     # plot the mountainsort data according to the current index 'i'
@@ -228,6 +214,7 @@ class Waveform(DPT.DPObject):
         #     # .........................................
         #     pass  # you may delete this line
             
+        return ax
     
     def plot_data(self, i, ax, plotOpts, isCorner):
         y = self.data[i]
