@@ -17,4 +17,9 @@ from .vmhighpass import VMHighPass
 from .vmraw import VMRaw
 from .raycast import raycast
 from .freqspectrum import FreqSpectrum
+<<<<<<< HEAD
 from .waveform import Waveform
+=======
+from .waveform import Waveform
+from .vmplacecell import VMPlaceCell
+>>>>>>> upstream/master
